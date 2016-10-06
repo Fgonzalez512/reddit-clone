@@ -1,31 +1,36 @@
 'use strict'
 
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
-const environment = process.env.NODE_ENV || 'development';
-const config = require('./knexfile')
-const knex = require('knex')(config[environment]);
-const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
-const methodOverride = require('method-override');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 3000;
+var config = require('./knexfile')[process.env.NODE_ENV];
+var knex = require('knex')(config);
 
-const users = require('./routes/users');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var router = express.Router();
+var auth = require('./routes/users');
+const cookieParser = require('cookie-parser');
 
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-app.use(methodOverride('_method'))
+app.use(cookieParser());
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-app.use(cookieSession({
-    secret: "alfred",
-}))
-app.use(require('flash')());
+app.use(morgan('combined'));
 
-app.use('/users', users);
+app.use('/', auth)
 
+app.get('/posts', function(req, res, next) {
+    if (req.cookies.loggedIn) {
+        res.render('posts');
+    } else {
+        res.send(404)
+    }
+})
+
+app.set('view engine', 'ejs');
 
 app.listen(port, function() {
     console.log('hello from', port);
