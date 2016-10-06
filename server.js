@@ -6,12 +6,11 @@ const port = process.env.PORT || 3000;
 const environment = process.env.NODE_ENV || 'development';
 const config = require('./knexfile')
 const knex = require('knex')(config[environment]);
-
 const bodyParser = require('body-parser');
-const router = express.Router();
 const cookieSession = require('cookie-session');
 const methodOverride = require('method-override');
-const bcrypt = require('bcrypt');
+
+const users = require('./routes/users');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -23,13 +22,13 @@ app.use(bodyParser.json());
 app.use(cookieSession({
     secret: "alfred",
 }))
+app.use(require('flash')());
 
-router.get('/', function(req, res, next) {
-    res.render('index')
-})
+app.use('/users', users);
+
 
 app.listen(port, function() {
-    console.log("listening on port: " + port);
-})
+    console.log('hello from', port);
+});
 
 module.exports = app;

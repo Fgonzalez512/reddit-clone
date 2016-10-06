@@ -11,4 +11,33 @@ describe('setup test/auto pass', function() {
     it('should pass the test', function() {
         expect(true).to.equal(true)
     })
-})
+});
+
+describe('Home', function() {
+    it('display home page', function(done) {
+        request.get('/')
+            .expect(200)
+            .end(function(err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.text).to.contain("Hello")
+                done();
+            })
+    })
+});
+
+
+describe('Users', function() {
+    it('should display all of the users', function(done) {
+        request.get('/users')
+            .expect(200)
+            .end(function(err, res) {
+                if (err) {
+                    done(err)
+                }
+                expect(res.text).to.contain("List")
+                done();
+            })
+    })
+});
