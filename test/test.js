@@ -1,11 +1,14 @@
-'use strict'
+'use strict';
+
+const chai = require('chai');
+const expect = chai.expect;
+const request = require('supertest');
 
 const app = require('../server');
-const request = require('supertest')(app);
-const config = require('../knexfile')[process.env.NODE_ENV];
+const config = require('../knexfile.js')['test'];
 const knex = require('knex')(config);
-const expect = require('chai').expect;
-const morgan = require('morgan');
+
+const bcrypt = require('bcrypt-as-promised');
 
 describe('setup test/auto pass', function() {
     it('should pass the test', function() {
@@ -13,42 +16,33 @@ describe('setup test/auto pass', function() {
     })
 });
 
-// describe('Home', function() {
-//     it('display home page', function(done) {
-//         request.get('/')
-//             .expect(200)
-//             .end(function(err, res) {
-//                 if (err) {
-//                     done(err);
-//                 }
-//                 expect(res.text).to.contain("Hello")
-//                 done();
-//             })
-//     })
-// });
-//
-// describe('All Users', function() {
-//     it('should display all of the users', function(done) {
-//         request.get('/users')
-//             .expect(200)
-//             .end(function(err, res) {
-//                 if (err) {
-//                     done(err)
-//                 } else {
-//                     expect(res.text).to.contain("Users")
-//                     done();
-//                 }
-//             })
-//     });
-//     it('should display a single user', function(done) {
-//         request.get('/users/1')
-//             .expect(200)
-//             .end(function(err, res) {
-//                 if (err) {
-//                     done(err)
-//                 }
-//                 expect(res.text).to.contain("Your user page:")
-//                 done();
-//             })
-//     })
-// })
+describe('main page', function() {
+    it('should go to home page', function(done) {
+        request(app).get('/')
+            .expect(200)
+            .end(function(err, res) {
+                expect(err).to.equal(null);
+                done();
+            });
+    });
+});
+
+describe('signup and auth', function() {
+    it('find auth/signup', function(done) {
+        request(app).get('/auth/signup')
+            .expect(200)
+            .end(function(err, res) {
+                expect(err).to.equal(null);
+                done();
+            });
+    });
+
+    it('signup form', function(done) {
+        request(app).get('/auth/signup')
+            .expect(200)
+            .end(function(err, res) {
+                expect(res.text).to.include('<form method="POST" action="/auth/signup">');
+                done();
+            });
+    });
+});

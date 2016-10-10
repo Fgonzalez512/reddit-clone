@@ -9,12 +9,12 @@
     </head>
 
     <body>
-        <h1>Reddit Login</h1>
-        <form method="POST" action="/auth/login">
-            <label for="email">Email</label>
-            <input type="text" name="email">
-            <label for="password">Password</label>
-            <input type="password" name="password">
+        <h1>Edit your Post</h1>
+        <form method="POST" action="/posts/edit?_method=PUT">
+            <label for="content">Content:</label>
+            <input type="text" name="content" value="">
+            <label for="link">Link:</label>
+            <input type="text" name="link" value="">
             <input type="submit">
         </form>
     </body>

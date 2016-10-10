@@ -5,9 +5,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Reddit</title>
+        <title>Edit Comment</title>
     </head>
 
     <body>
-        <h2>Hello</h2>
+        <form method="POST" action="/comment/edit?_method=PUT">
+            <textarea name="content" rows="8" cols="40"></textarea>
+        </form>
     </body>
+
+</html>

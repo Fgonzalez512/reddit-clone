@@ -1,39 +1,45 @@
-'use strict'
+'use strict';
 
-var express = require('express');
-var app = express();
-var port = process.env.PORT || 3000;
-var config = require('./knexfile')[process.env.NODE_ENV];
-var knex = require('knex')(config);
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var router = express.Router();
-var auth = require('./routes/users');
-const cookieParser = require('cookie-parser');
+const environment = process.env.NODE_ENV;
+const config = require('./knexfile.js')[environment];
+const knex = require('knex')(config);
+const cookieSession = require('cookie-session')
 
-app.use(cookieParser());
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
 app.use(bodyParser.json());
-app.use(morgan('combined'));
 
-app.use('/', auth)
+app.use(methodOverride('_method'))
 
-app.get('/posts', function(req, res, next) {
-    if (req.cookies.loggedIn) {
-        res.render('posts');
-    } else {
-        res.send(404)
-    }
-})
+app.use(cookieSession({
+    secret: 'alfred',
+}));
+
+const auth = require('./routes/auth');
+const users = require('./routes/users');
+const posts = require('./routes/posts');
 
 app.set('view engine', 'ejs');
 
-app.listen(port, function() {
-    console.log('hello from', port);
+app.get('/', function(req, res) {
+    res.send('hello');
+});
+
+app.use('/auth', auth);
+app.use('/users', users);
+app.use('/posts', posts);
+
+app.listen(PORT, function() {
+    console.log('Hello from port:', PORT);
 });
 
 module.exports = app;

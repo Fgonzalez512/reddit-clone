@@ -1,9 +1,11 @@
 exports.up = function(knex, Promise) {
     return knex.schema.createTableIfNotExists('posts', function(table) {
         table.increments();
-        table.string('title').notNullable().defaultTo('check this out');
-        table.string('body').notNullable().defaultTo("");
-        table.integer('user_id').unsigned().index().references('id').inTable('users').onDelete('CASCADE');
+        table.string('content').notNullable();
+        table.string('link').notNullable();
+        table.string('img_url');
+        table.integer('user_id').unsigned();
+        table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE');
         table.timestamps(true, true);
     })
 };

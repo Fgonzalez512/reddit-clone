@@ -9,7 +9,15 @@
     </head>
 
     <body>
-        There will be posts here soon.
+        <h1>Welcome Username</h1>
+        <h3>Posts:</h3>
+        <ul>
+            <% posts.forEach(function (post) { %>
+                <li>
+                    <%=post.content%>
+                </li>
+                <% }) %>
+        </ul>
     </body>
 
 </html>
