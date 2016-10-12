@@ -6,7 +6,7 @@ module.exports = {
         client: 'pg',
         connection: {
             database: 'reddit',
-            host: 'localhost'
+            host: '127.0.0.1'
         }
     },
 
@@ -14,7 +14,7 @@ module.exports = {
         client: 'pg',
         connection: {
             database: 'reddit-test',
-            host: 'localhost',
+            host: '127.0.0.1',
         }
     },
 
