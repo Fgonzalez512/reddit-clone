@@ -5,10 +5,7 @@ module.exports = {
 
     production: {
         client: 'pg',
-        connection: {
-            database: 'reddit',
-            host: '127.0.0.1'
-        }
+        connection: process.env.DATABASE_URL
     },
 
     development: {
